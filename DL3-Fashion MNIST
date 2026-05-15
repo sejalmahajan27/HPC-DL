@@ -83,6 +83,14 @@ history = model.fit(
 )
 
 
+//10 - Evaluate Model
+loss, accuracy = model.evaluate(testX, testY)
+print("Test Accuracy:", accuracy)
+
+
+
+
+
 
 #First we imported required libraries.
 Then we loaded Fashion MNIST dataset.
@@ -92,10 +100,5 @@ Then we created CNN model using Conv2D, MaxPooling, Flatten, Dense and Dropout l
 Model was compiled using Adam optimizer and categorical crossentropy loss function.
 Then we trained the model using fit() and finally evaluated accuracy using evaluate().
 
-
-
-//10 - Evaluate Model
-loss, accuracy = model.evaluate(testX, testY)
-print("Test Accuracy:", accuracy)
 
 
