@@ -63,6 +63,7 @@ double average(int arr[], int n) {
 
     return (double)sum(arr, n) / n;
     // Average = Total Sum / Number of Elements
+// Type casting to double gives decimal answer.
 }
 
 
