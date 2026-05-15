@@ -149,3 +149,19 @@ plt.show()
 # =========================
 loss, accuracy = model.evaluate(X_test, y_test)
 print("\nFinal Accuracy:", accuracy)
+
+
+
+
+
+First we imported required libraries.
+Then we loaded IMDB dataset using pandas.
+After that we cleaned text data by removing HTML tags, symbols and converting text to lowercase.
+Then we converted sentiments into numerical values using label encoding.
+Next we used TF-IDF vectorization to convert text into numbers.
+Dataset was divided into training and testing data.
+Then we built a Deep Learning neural network using Keras Sequential model with Dense layers.
+Model was compiled using Adam optimizer and binary crossentropy loss.
+After training, we plotted accuracy graph and evaluated final accuracy.
+
+Finding emotion/opinion from text. - sentiment
