@@ -1,93 +1,145 @@
-#include <iostream>
-#include <omp.h>
-#include <ctime>
+#include <iostream>   // Used for input and output operations like cout
+#include <omp.h>      // OpenMP library for parallel programming
+#include <ctime>      // Used for time-related functions
 
-using namespace std;
+using namespace std;  // Allows using standard functions without std::
 
-// Function for Minimum
+
+// Function to find Minimum value from array
 int minval(int arr[], int n) {
-    int minval = arr[0];
+
+    int minval = arr[0];   // Assume first element as minimum initially
 
     #pragma omp parallel for reduction(min:minval)
+    // Parallel loop where each thread finds local minimum and OpenMP combines results safely
+
     for(int i = 0; i < n; i++) {
-        if(arr[i] < minval)
-            minval = arr[i];
+
+        if(arr[i] < minval)   // Check if current element is smaller
+            minval = arr[i];  // Update minimum value
     }
 
-    return minval;
+    return minval;   // Return final minimum value
 }
 
-// Function for Maximum
+
+// Function to find Maximum value from array
 int maxval(int arr[], int n) {
-    int maxval = arr[0];
+
+    int maxval = arr[0];   // Assume first element as maximum initially
 
     #pragma omp parallel for reduction(max:maxval)
+    // Parallel loop where each thread finds local maximum and combines results safely
+
     for(int i = 0; i < n; i++) {
-        if(arr[i] > maxval)
-            maxval = arr[i];
+
+        if(arr[i] > maxval)   // Check if current element is greater
+            maxval = arr[i];  // Update maximum value
     }
 
-    return maxval;
+    return maxval;   // Return final maximum value
 }
 
-// Function for Sum
+
+// Function to calculate Sum of array elements
 int sum(int arr[], int n) {
-    int total = 0;
+
+    int total = 0;   // Variable to store total sum
 
     #pragma omp parallel for reduction(+:total)
+    // Parallel loop where each thread calculates partial sum and OpenMP adds them
+
     for(int i = 0; i < n; i++) {
-        total += arr[i];
+
+        total += arr[i];   // Add current element into total sum
     }
 
-    return total;
+    return total;   // Return final sum
 }
 
-// Function for Average
+
+// Function to calculate Average of array elements
 double average(int arr[], int n) {
+
     return (double)sum(arr, n) / n;
+    // Average = Total Sum / Number of Elements
 }
+
 
 int main() {
 
-    int n = 10;
+    int n = 10;   // Size of array
 
     int arr[10] = {10, 20, 5, 40, 25, 15, 30, 35, 50, 45};
+    // Array containing integer elements
 
-    double start, end;
+    double start, end;   // Variables used for execution time calculation
 
-    // Minimum
-    start = omp_get_wtime();
-    int minimum = minval(arr, n);
-    end = omp_get_wtime();
+
+    // -------- Minimum Operation --------
+
+    start = omp_get_wtime();   // Start timer
+
+    int minimum = minval(arr, n);   // Call minimum function
+
+    end = omp_get_wtime();   // Stop timer
 
     cout << "Minimum Value = " << minimum << endl;
-    cout << "Time for Min Operation = " << end - start << " seconds\n" << endl;
 
-    // Maximum
-    start = omp_get_wtime();
-    int maximum = maxval(arr, n);
-    end = omp_get_wtime();
+    cout << "Time for Min Operation = "
+         << end - start << " seconds\n" << endl;
+    // Print execution time for minimum operation
+
+
+
+    // -------- Maximum Operation --------
+
+    start = omp_get_wtime();   // Start timer
+
+    int maximum = maxval(arr, n);   // Call maximum function
+
+    end = omp_get_wtime();   // Stop timer
 
     cout << "Maximum Value = " << maximum << endl;
-    cout << "Time for Max Operation = " << end - start << " seconds\n" << endl;
 
-    // Sum
-    start = omp_get_wtime();
-    int totalsum = sum(arr, n);
-    end = omp_get_wtime();
+    cout << "Time for Max Operation = "
+         << end - start << " seconds\n" << endl;
+    // Print execution time for maximum operation
+
+
+
+    // -------- Sum Operation --------
+
+    start = omp_get_wtime();   // Start timer
+
+    int totalsum = sum(arr, n);   // Call sum function
+
+    end = omp_get_wtime();   // Stop timer
 
     cout << "Sum = " << totalsum << endl;
-    cout << "Time for Sum Operation = " << end - start << " seconds\n" << endl;
 
-    // Average
-    start = omp_get_wtime();
-    double avg = average(arr, n);
-    end = omp_get_wtime();
+    cout << "Time for Sum Operation = "
+         << end - start << " seconds\n" << endl;
+    // Print execution time for sum operation
+
+
+
+    // -------- Average Operation --------
+
+    start = omp_get_wtime();   // Start timer
+
+    double avg = average(arr, n);   // Call average function
+
+    end = omp_get_wtime();   // Stop timer
 
     cout << "Average = " << avg << endl;
-    cout << "Time for Average Operation = " << end - start << " seconds\n" << endl;
 
-    return 0;
+    cout << "Time for Average Operation = "
+         << end - start << " seconds\n" << endl;
+    // Print execution time for average operation
+
+
+    return 0;   // Program ends successfully
 }
 
 // g++ d.cpp -fopenmp -o d
