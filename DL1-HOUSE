@@ -54,8 +54,8 @@ model.add(Dense(1,
 
 # Compile model
 model.compile(
-    optimizer='adam',
-    loss='mse',
+    optimizer='adam',  #updates weights.
+    loss='mse',    #Measures prediction error.
     metrics=['mae']
 )
 
