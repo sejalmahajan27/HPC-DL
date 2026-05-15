@@ -1,59 +1,76 @@
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <omp.h>
+#include <iostream>   // Used for input and output
+#include <vector>     // Used for dynamic arrays (adjacency list)
+#include <queue>      // Used for BFS traversal
+#include <omp.h>      // OpenMP library for parallel programming
 
 using namespace std;
 
 class Graph {
-    int V;
-    vector<vector<int>> adj;
+    int V;                           // Stores total number of vertices
+    vector<vector<int>> adj;         // Adjacency list to store graph connections
 
 public:
     Graph(int V) {
-        this->V = V;
-        adj.resize(V);
+        this->V = V;                 // Initialize number of vertices
+        adj.resize(V);               // Create adjacency list of size V
     }
 
     void addEdge(int u, int v) {
-        adj[u].push_back(v);
-        adj[v].push_back(u); // undirected graph
+        adj[u].push_back(v);         // Add edge from u to v
+        adj[v].push_back(u);         // Add edge from v to u (undirected graph)
     }
 
-    // 🔵 Parallel BFS
+    // 🔵 Parallel BFS Function
     void parallelBFS(int start) {
-        vector<bool> visited(V, false);
-        queue<int> q;
 
-        visited[start] = true;
-        q.push(start);
+        vector<bool> visited(V, false);   // Track visited vertices
+        queue<int> q;                     // Queue used for BFS traversal
+
+        visited[start] = true;            // Mark starting node as visited
+        q.push(start);                    // Insert starting node into queue
 
         cout << "\nParallel BFS Traversal: ";
 
-        while (!q.empty()) {
-            int size = q.size();
+        while (!q.empty()) {              // Continue until queue becomes empty
+
+            int size = q.size();          // Store current queue size
 
             #pragma omp parallel for
+            // Divide loop work among multiple threads
+
             for (int i = 0; i < size; i++) {
-                int node = -1;
+
+                int node = -1;            // Variable to store current node
 
                 #pragma omp critical
+                // Only one thread accesses queue at a time
+
                 {
                     if (!q.empty()) {
-                        node = q.front();
-                        q.pop();
-                        cout << node << " ";
+                        node = q.front(); // Get front node from queue
+                        q.pop();          // Remove node from queue
+                        cout << node << " "; // Print current node
                     }
                 }
 
                 if (node != -1) {
+
                     for (int neighbor : adj[node]) {
+                        // Traverse all neighboring vertices
+
                         if (!visited[neighbor]) {
+
                             #pragma omp critical
+                            // Prevent race condition while updating shared data
+
                             {
                                 if (!visited[neighbor]) {
+
                                     visited[neighbor] = true;
+                                    // Mark neighbor as visited
+
                                     q.push(neighbor);
+                                    // Insert neighbor into queue
                                 }
                             }
                         }
@@ -61,44 +78,63 @@ public:
                 }
             }
         }
+
         cout << endl;
     }
 
-    // 🔴 Parallel DFS Utility
+    // 🔴 Parallel DFS Utility Function
     void parallelDFSUtil(int node, vector<bool> &visited) {
+
         bool alreadyVisited;
 
         #pragma omp critical
+        // Protect shared visited array
+
         {
             alreadyVisited = visited[node];
+
             if (!visited[node]) {
-                visited[node] = true;
-                cout << node << " ";
+
+                visited[node] = true;   // Mark node as visited
+                cout << node << " ";    // Print current node
             }
         }
 
-        if (alreadyVisited) return;
+        if (alreadyVisited)
+            return;                     // Stop if node already visited
 
         #pragma omp parallel for
+        // Explore neighbors in parallel
+
         for (int i = 0; i < adj[node].size(); i++) {
+
             int neighbor = adj[node][i];
 
             if (!visited[neighbor]) {
+
                 #pragma omp task
+                // Create parallel task for recursive DFS call
+
                 parallelDFSUtil(neighbor, visited);
             }
         }
     }
 
-    // 🔴 Parallel DFS
+    // 🔴 Parallel DFS Function
     void parallelDFS(int start) {
+
         vector<bool> visited(V, false);
+        // Track visited nodes
 
         cout << "\nParallel DFS Traversal: ";
 
         #pragma omp parallel
+        // Create parallel region
+
         {
             #pragma omp single
+            // Only one thread starts DFS traversal
+
             {
                 parallelDFSUtil(start, visited);
             }
@@ -109,31 +145,38 @@ public:
 };
 
 int main() {
+
     int V, E;
 
     cout << "Enter number of vertices: ";
-    cin >> V;
+    cin >> V;                        // Input total vertices
 
-    Graph g(V);
+    Graph g(V);                      // Create graph object
 
     cout << "Enter number of edges: ";
-    cin >> E;
+    cin >> E;                        // Input total edges
 
     cout << "Enter edges (u v):\n";
+
     for (int i = 0; i < E; i++) {
+
         int u, v;
-        cin >> u >> v;
-        g.addEdge(u, v);
+
+        cin >> u >> v;               // Input connected vertices
+
+        g.addEdge(u, v);             // Add edge into graph
     }
 
     int start;
+
     cout << "Enter starting vertex: ";
-    cin >> start;
+    cin >> start;                    // Input starting node
 
-    g.parallelBFS(start);
-    g.parallelDFS(start);
+    g.parallelBFS(start);            // Call Parallel BFS
 
-    return 0;
+    g.parallelDFS(start);            // Call Parallel DFS
+
+    return 0;                        // Program ends successfully
 }
 
     //    0
