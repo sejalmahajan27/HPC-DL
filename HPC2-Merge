@@ -249,3 +249,10 @@ int main() {
 
 // g++ d.cpp -fopenmp -o d
 // .\d.exe
+
+
+“In this program, I implemented sequential and parallel versions of Bubble Sort and Merge Sort using OpenMP. 
+Random numbers are generated and sorting times are measured using omp_get_wtime(). 
+In parallel bubble sort, even and odd indexed pairs are processed simultaneously using #pragma omp parallel for. 
+In parallel merge sort, array halves are sorted simultaneously using OpenMP sections. 
+The program demonstrates how parallel programming improves performance compared to sequential execution.”
