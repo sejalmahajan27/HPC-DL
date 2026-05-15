@@ -144,3 +144,13 @@ int main() {
 
 // g++ d.cpp -fopenmp -o d
 // .\d.exe
+
+
+
+//this program demonstrates parallel programming using OpenMP.
+We perform minimum, maximum, sum, and average operations on an array using parallel threads.
+
+#pragma omp parallel for divides loop iterations among threads.
+Reduction clause combines results safely and prevents race conditions.
+
+We also measure execution time using omp_get_wtime() to compare performance.”
