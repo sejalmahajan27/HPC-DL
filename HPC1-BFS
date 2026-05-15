@@ -200,3 +200,10 @@ int main() {
 
 // g++ HPC1.cpp -o HPC1
 // HPC1.exe
+
+
+“This program implements parallel BFS and DFS using OpenMP.
+Graph is stored using adjacency list.
+BFS uses queue and DFS uses recursion.
+OpenMP directives like parallel for, critical, and task are used to execute graph traversal using multiple threads simultaneously.
+Critical sections prevent race conditions while accessing shared resources like queue and visited array.”
