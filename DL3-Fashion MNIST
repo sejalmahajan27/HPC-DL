@@ -84,6 +84,15 @@ history = model.fit(
 
 
 
+#First we imported required libraries.
+Then we loaded Fashion MNIST dataset.
+After that we reshaped and normalized images.
+Labels were converted into categorical format.
+Then we created CNN model using Conv2D, MaxPooling, Flatten, Dense and Dropout layers.
+Model was compiled using Adam optimizer and categorical crossentropy loss function.
+Then we trained the model using fit() and finally evaluated accuracy using evaluate().
+
+
 
 //10 - Evaluate Model
 loss, accuracy = model.evaluate(testX, testY)
