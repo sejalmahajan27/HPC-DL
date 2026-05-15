@@ -102,3 +102,14 @@ plt.ylabel("Loss")
 plt.show()
 
 
+
+
+#This project predicts Boston house prices using Deep Learning regression. 
+First we import libraries and load dataset. 
+Then we separate features and target variable MEDV. 
+Dataset is divided into training and testing data. 
+After scaling the data using StandardScaler, we build a Sequential neural network using Dense layer with linear activation. 
+Model is compiled using Adam optimizer and MSE loss function. 
+Then model is trained for 100 epochs and evaluated using MAE and loss. 
+Finally predictions and loss graphs are displayed.
+
